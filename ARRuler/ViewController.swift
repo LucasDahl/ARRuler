@@ -16,6 +16,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var sceneView: ARSCNView!
     
     // Properties
+    var dotNodes = [SCNNode]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +41,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
         // Run the view's session
         sceneView.session.run(configuration)
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -47,6 +49,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Pause the view's session
         sceneView.session.pause()
+        
     }
     
     //================
@@ -93,6 +96,38 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Add the child node
         sceneView.scene.rootNode.addChildNode(dotNode)
+        
+        // Add the node to the dotNodes array
+        dotNodes.append(dotNode)
+        
+        // Check if there is more than one node in the array
+        if dotNodes.count >= 2 {
+            
+            // Calculate
+            calculate()
+            
+        }
+        
+    }
+    
+    func calculate() {
+    
+        // Get the first node(where you start the mesaurment)
+        let start = dotNodes[0]
+        
+        // Get the last node(where you end the measurment)
+        let end = dotNodes[1]
+        
+        // Get the distance
+        // Could be made more simple by not declaring constants and putting the below math in the distance constant, it is to show the math for people not great at math.
+        let a = end.position.x - start.position.x
+        let b = end.position.y - start.position.y
+        let c = end.position.z - start.position.z
+        
+        let distance = sqrt(pow(a, 2) + pow(b, 2) + pow(c, 2))
+        
+        // Print the absolute distance
+        print(abs(distance))
         
     }
     
