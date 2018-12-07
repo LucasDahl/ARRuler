@@ -80,6 +80,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - Adding UI Elements
     //===========================
     
+    // Add the dots for where the user touches
     func addDot(at hitResult: ARHitTestResult) {
         
         // Create a new dot geometry and set it's properties
@@ -110,6 +111,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
     }
     
+    // Calculate the distance
     func calculate() {
     
         // Get the first node(where you start the mesaurment)
@@ -127,8 +129,33 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let distance = sqrt(pow(a, 2) + pow(b, 2) + pow(c, 2))
         
         // Print the absolute distance
-        print(abs(distance))
+        //print(abs(distance))
         
+        updateText(text: "\(abs(distance))", atLocation: end.position)
+        
+    }
+    
+    // Make the text that displays the distance
+    func updateText(text: String, atLocation position: SCNVector3) {
+
+        // Get the text geomtry
+        let textGeometry = SCNText(string: text, extrusionDepth: 1.0)
+        
+        // Set the color of the text
+        textGeometry.firstMaterial?.diffuse.contents = UIColor.red
+        
+        // Create the node
+        let textNode = SCNNode(geometry: textGeometry)
+        
+        // Position the node based on the end location
+        textNode.position = SCNVector3(position.x, position.y + 0.01, position.z)
+        
+        // Change the scale of the text
+        textNode.scale = SCNVector3(0.01, 0.01, 0.01)
+        
+        // Add the textNode to the scene
+        sceneView.scene.rootNode.addChildNode(textNode)
+       
     }
     
 
